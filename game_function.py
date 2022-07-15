@@ -30,6 +30,9 @@ def check_play_button(ai_settings, screen, stats, play_button, ship, aliens, bul
 		aliens.empty()
 		bullets.empty()
 		sb.prep_score()
+		sb.prep_high_score()
+		sb.prep_level()
+		sb.prep_ships()
 		create_fleet(ai_settings, screen, aliens, ship)
 		ship.center_ship()
 		
@@ -123,14 +126,14 @@ def create_fleet(ai_settings, screen, aliens, ship):
 			create_alien(ai_settings, screen, aliens, alien_number, row_number)
 
 
-def updata_aliens(ai_settings, stats, screen, ship, aliens, bullets):
+def updata_aliens(ai_settings, stats, screen, ship, aliens, bullets, sb):
 	check_fleet_edges(ai_settings, aliens)
 	aliens.update()
 	
 	if pygame.sprite.spritecollideany(ship, aliens):
 		print ("Ship hit!!!")
-		ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
-	check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
+		ship_hit(ai_settings, stats, screen, ship, aliens, bullets, sb)
+	check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets, sb)
 		
 def check_fleet_edges(ai_settings, aliens):
 	for alien in aliens.sprites():
@@ -145,7 +148,7 @@ def change_fleet_direction(ai_settings, aliens):
 	
 
 
-def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets, sb):
 	
 	if stats.ships_left >0:
 
@@ -153,7 +156,7 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
 	
 		aliens.empty()
 		bullets.empty()
-		
+		sb.prep_ships()
 		create_fleet(ai_settings, screen, aliens, ship)
 		ship.center_ship()
 		sleep(0.5)
@@ -163,11 +166,11 @@ def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
 		pygame.mouse.set_visible(True)
 		
 		
-def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets, sb):
 	screen_rect = screen.get_rect()
 	for alien in aliens.sprites():
 		if alien.rect.bottom >= screen_rect.bottom:
-			ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
+			ship_hit(ai_settings, stats, screen, ship, aliens, bullets, sb)
 			break
 	
 
